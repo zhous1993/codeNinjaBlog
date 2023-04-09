@@ -1,0 +1,25 @@
+.container{
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    color: white;
+    text-align: center;
+    padding-top: 2rem;
+    filter: contrast(30);
+}
+.blendText{
+    font-size: 6rem;
+    letter-spacing: -3rem;
+    animation: showup 3s forwards;
+    font-weight: bold;
+    filter: blur(5px);
+}
+
+@keyframes showup {
+    form{
+        letter-spacing: -3rem;
+    }
+    to{
+        letter-spacing: 0;
+    }
+}
