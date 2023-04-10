@@ -1,0 +1,14 @@
+.contextMenu{
+    position: absolute;
+    background: white;
+    border-radius: .5rem;
+    border: 1px solid white;
+    position: fixed;
+
+}
+.menuItem{
+    padding: .5rem 1rem ;
+    &:hover{
+        background: #eee;
+    }
+}
