@@ -1,8 +1,8 @@
 /*
  * @Author: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
  * @Date: 2023-04-10 17:05:24
- * @LastEditors: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
- * @LastEditTime: 2023-04-11 17:52:05
+ * @LastEditors: DESKTOP-16EDV1I\zs_lq zhous0310@gmail.com
+ * @LastEditTime: 2023-04-11 20:20:25
  * @FilePath: \study\codeNinjaBlog\pages\post\music-player.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -27,6 +27,16 @@ export default function MusicPlayerView() {
       h = canvasRef.current.height;
       ctx = canvasRef.current.getContext('2d') as CanvasRenderingContext2D;
       ctx.fillStyle = '#fff';
+    }
+    if (audioRef.current) {
+      audioRef.current.addEventListener('ended', () => {
+        const index = musicList.findIndex((item) => item.id == songId);
+        if (index < musicList.length - 3) {
+          setSongId(musicList[index + 1].id);
+        } else {
+          fetchMusicList();
+        }
+      });
     }
     audioRef.current?.addEventListener('play', init);
     draw();
@@ -79,7 +89,7 @@ export default function MusicPlayerView() {
   const [songId, setSongId] = useState('');
   const [songUrl, setSongUrl] = useState('');
   const fetchMusicList = () => {
-    fm().then(({ data }) => {
+    fm().then(({ data }: any) => {
       const list = data.map((item: any) => {
         return { name: item.name, id: item.id };
       });
