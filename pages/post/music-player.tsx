@@ -1,12 +1,13 @@
 /*
  * @Author: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
  * @Date: 2023-04-10 17:05:24
- * @LastEditors: DESKTOP-16EDV1I\zs_lq zhous0310@gmail.com
- * @LastEditTime: 2023-04-10 22:53:25
+ * @LastEditors: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
+ * @LastEditTime: 2023-04-11 17:52:05
  * @FilePath: \study\codeNinjaBlog\pages\post\music-player.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
-import MusicPlayer from '@/components/MusicPlayer';
+import { fetchSongUrlById, fm } from '@/api/music';
+import MusicPlayerLogin from '@/components/MusicPlayer/Login';
 import styles from '@/styles/music-player.module.scss';
 import { useEffect, useRef, useState } from 'react';
 export default function MusicPlayerView() {
@@ -14,23 +15,27 @@ export default function MusicPlayerView() {
   const audioRef = useRef<HTMLMediaElement>(null);
   // const [isInit, setIsInit] = useState<boolean>(true);
   let ctx: CanvasRenderingContext2D;
+  // 画布宽高
   let w = 0,
     h = 0;
   useEffect(() => {
     if (canvasRef.current) {
+      // 初始化canvas
       canvasRef.current.width = window.innerWidth * window.devicePixelRatio;
       canvasRef.current.height = window.innerHeight / 2;
       w = canvasRef.current.width;
       h = canvasRef.current.height;
       ctx = canvasRef.current.getContext('2d') as CanvasRenderingContext2D;
+      ctx.fillStyle = '#fff';
     }
     audioRef.current?.addEventListener('play', init);
     draw();
+    fetchMusicList();
   }, []);
   let audioCtx, source, analyser: AnalyserNode, dataArr: Uint8Array;
   let isInit = false;
+
   const init = () => {
-    console.log(isInit);
     if (isInit) return;
     // 音频上下文
     audioCtx = new window.AudioContext();
@@ -47,16 +52,22 @@ export default function MusicPlayerView() {
     analyser.connect(audioCtx.destination);
     isInit = true;
   };
+  /**
+   * 画波形
+   */
   const draw = () => {
+    // 逐帧绘画
     requestAnimationFrame(draw);
     if (!isInit) return;
+    // 将解析数据放到数组里
     analyser.getByteFrequencyData(dataArr);
+    // 清空画布
     ctx.clearRect(0, 0, canvasRef.current?.width as number, canvasRef.current?.height as number);
     const barLength = dataArr.length / 2.5;
     const barWidth = w / barLength / 2;
-    ctx.fillStyle = '#fff';
     for (let i = 0; i < dataArr.length; i++) {
       const x1 = i * barWidth + w / 2;
+      // 对称画图
       const x2 = w / 2 - i * barWidth;
       const barHeight = (dataArr[i] / 256) * h;
       const y = h - barHeight;
@@ -64,10 +75,34 @@ export default function MusicPlayerView() {
       ctx.fillRect(x2, y, barWidth - 2, barHeight);
     }
   };
+  const [musicList, setMusicList] = useState<{ name: string; id: string }[]>([]);
+  const [songId, setSongId] = useState('');
+  const [songUrl, setSongUrl] = useState('');
+  const fetchMusicList = () => {
+    fm().then(({ data }) => {
+      const list = data.map((item: any) => {
+        return { name: item.name, id: item.id };
+      });
+      setMusicList(list);
+    });
+  };
+  useEffect(() => {
+    setSongId(musicList[0]?.id);
+  }, [musicList]);
+  useEffect(() => {
+    if (songId) {
+      fetchSongUrlById(songId).then((res: any) => {
+        if (res.code === 200 && res.data.length > 0) {
+          setSongUrl(res.data[0].url);
+        }
+      });
+    }
+  }, [songId]);
   return (
     <div className={`${styles.playerView}`}>
       <canvas ref={canvasRef} className="w-full"></canvas>
-      <audio className="mt-10 mx-auto" ref={audioRef} controls src="/小城故事.wav"></audio>
+      <audio className="mt-10 mx-auto" crossOrigin="anonymous" ref={audioRef} controls src={songUrl}></audio>
+      <MusicPlayerLogin />
     </div>
   );
 }
