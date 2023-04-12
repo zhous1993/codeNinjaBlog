@@ -2,7 +2,7 @@
  * @Author: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
  * @Date: 2023-04-10 17:05:24
  * @LastEditors: DESKTOP-16EDV1I\zs_lq zhous0310@gmail.com
- * @LastEditTime: 2023-04-12 21:27:17
+ * @LastEditTime: 2023-04-12 22:12:25
  * @FilePath: \study\codeNinjaBlog\pages\post\music-player.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 export default function MusicPlayerView() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const audioRef = useRef<HTMLMediaElement>(null);
+  const [isLogged, setIsLogged] = useState(false);
   // const [isInit, setIsInit] = useState<boolean>(true);
   const ctx = useRef<CanvasRenderingContext2D>();
   // 画布宽高
@@ -134,19 +135,28 @@ export default function MusicPlayerView() {
   }, [songId]);
   return (
     <div className={`${styles.playerView}`}>
-      <canvas ref={canvasRef} className="w-full absolute bottom-0"></canvas>
+      {!isLogged ? (
+        <MusicPlayerLogin
+          login={(e: boolean) => {
+            setIsLogged(e);
+          }}
+        />
+      ) : (
+        <>
+          <canvas ref={canvasRef} className="w-full absolute bottom-0"></canvas>
 
-      <MusicPlayerLogin />
-      <div className="text-center py-4 text-2xl text-white">{songName}</div>
-      <Lrc lrc={lrc} currentTime={currentTime} />
-      <audio
-        className="mt-10 mx-auto absolute bottom-0"
-        crossOrigin="anonymous"
-        ref={audioRef}
-        controls
-        autoPlay
-        src={songUrl}
-      ></audio>
+          <div className="text-center py-4 text-2xl text-white">{songName}</div>
+          <Lrc lrc={lrc} currentTime={currentTime} />
+          <audio
+            className="mt-10 mx-auto absolute bottom-0"
+            crossOrigin="anonymous"
+            ref={audioRef}
+            controls
+            autoPlay
+            src={songUrl}
+          ></audio>
+        </>
+      )}
     </div>
   );
 }

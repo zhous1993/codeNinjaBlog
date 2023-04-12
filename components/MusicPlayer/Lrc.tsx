@@ -11,7 +11,7 @@ import styles from './Lrc.module.scss';
 export function calcTime(params: string): number {
   if (!params) return 0;
   let arr = params.split(':');
-  arr = [arr[0], ...arr[1].split('.')];
+  arr = [arr[0], ...arr[1]?.split('.')];
   const res = +arr[0] * 60 * 1000 + +arr[1] * 1000 + +arr[2];
   return res;
 }

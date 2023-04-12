@@ -2,13 +2,13 @@
  * @Author: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
  * @Date: 2023-04-11 14:45:51
  * @LastEditors: DESKTOP-16EDV1I\zs_lq zhous0310@gmail.com
- * @LastEditTime: 2023-04-12 21:26:24
+ * @LastEditTime: 2023-04-12 22:17:16
  * @FilePath: \study\codeNinjaBlog\components\MusicPlayer\Login.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { checkQR, createQR, fetchQRKey, fm } from '@/api/music';
 import { useEffect, useRef, useState } from 'react';
-export default function MusicPlayerLogin() {
+export default function MusicPlayerLogin({ login }: { login: (e: boolean) => void }) {
   let key = useRef<string>('');
   let timer = useRef<any>(null);
   const [qrimg, setQrimg] = useState<string>('');
@@ -16,7 +16,7 @@ export default function MusicPlayerLogin() {
   const [status, setStatus] = useState('等待扫码');
   const initQRCode = async () => {
     const res = await fetchQRKey();
-    key = res.data.unikey;
+    key.current = res.data.unikey;
     const { data } = await createQR(key.current);
     console.log('刷新图片');
     setQrimg(data.qrimg);
@@ -50,15 +50,17 @@ export default function MusicPlayerLogin() {
       clearTimeout(timer.current);
     };
   }, []);
-
+  useEffect(() => {
+    login(isLogged);
+  }, [isLogged]);
   return (
-    <div className="text-white">
+    <div className="text-white flex justify-center flex-col items-center py-4">
       {isLogged ? (
         <div></div>
       ) : (
         <>
           <img width={100} height={100} src={qrimg} alt="" />
-          <div>{status}</div>
+          <div className="my-4">{status}</div>
         </>
       )}
     </div>
