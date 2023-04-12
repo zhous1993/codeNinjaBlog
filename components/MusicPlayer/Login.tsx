@@ -1,31 +1,31 @@
 /*
  * @Author: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
  * @Date: 2023-04-11 14:45:51
- * @LastEditors: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
- * @LastEditTime: 2023-04-11 17:20:35
+ * @LastEditors: DESKTOP-16EDV1I\zs_lq zhous0310@gmail.com
+ * @LastEditTime: 2023-04-12 21:26:24
  * @FilePath: \study\codeNinjaBlog\components\MusicPlayer\Login.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { checkQR, createQR, fetchQRKey, fm } from '@/api/music';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 export default function MusicPlayerLogin() {
-  let key: string;
-  let timer: any;
+  let key = useRef<string>('');
+  let timer = useRef<any>(null);
   const [qrimg, setQrimg] = useState<string>('');
   const [isLogged, setIsLogged] = useState(false);
   const [status, setStatus] = useState('等待扫码');
   const initQRCode = async () => {
     const res = await fetchQRKey();
     key = res.data.unikey;
-    const { data } = await createQR(key);
+    const { data } = await createQR(key.current);
     console.log('刷新图片');
     setQrimg(data.qrimg);
     checkQRCode();
   };
   const checkQRCode = () => {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(async () => {
-      const res: any = await checkQR(key);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(async () => {
+      const res: any = await checkQR(key.current);
       setStatus(res.message);
       if (res.code === 803) {
         console.log('登录成功');
@@ -47,7 +47,7 @@ export default function MusicPlayerLogin() {
       setIsLogged(true);
     }
     return () => {
-      clearTimeout(timer);
+      clearTimeout(timer.current);
     };
   }, []);
 

@@ -1,3 +1,11 @@
+/*
+ * @Author: DESKTOP-16EDV1I\zs_lq zhous0310@gmail.com
+ * @Date: 2023-04-12 20:59:50
+ * @LastEditors: DESKTOP-16EDV1I\zs_lq zhous0310@gmail.com
+ * @LastEditTime: 2023-04-12 21:26:53
+ * @FilePath: \Study\ninja-blog\components\MusicPlayer\Lrc.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { useEffect, useRef, useState } from 'react';
 import styles from './Lrc.module.scss';
 export function calcTime(params: string): number {
@@ -30,10 +38,9 @@ export default function Lrc({ lrc, currentTime }: { lrc: string; currentTime: nu
     setLrcList(formatLrc(lrc));
   }, [lrc]);
   useEffect(() => {
-    console.log(currentTime);
     const index = lrcList.findIndex((item) => item.time > currentTime * 1000);
     setActiveIndex(index < 0 ? 0 : index - 1);
-  }, [currentTime]);
+  }, [currentTime, lrcList]);
   return (
     <div ref={lrcBoxRef} className={`${styles.lrcBox} text-white`}>
       <div className={styles.list} style={{ transform: `translateY(${h / 2 - activeIndex * 40}px)` }}>
