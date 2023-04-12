@@ -1,0 +1,17 @@
+.lrcBox{
+    text-align: center;
+    overflow: hidden;
+    height: 50vh;
+}
+.list{
+    transition: all 0.5s;
+}
+.item{
+    height: 40px;
+    line-height: 40px;
+    transition: all 0.5s;
+    &.active{
+        transform: scale(1.5);
+        color: salmon;
+    }
+}

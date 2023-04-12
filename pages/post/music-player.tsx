@@ -1,13 +1,14 @@
 /*
  * @Author: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
  * @Date: 2023-04-10 17:05:24
- * @LastEditors: DESKTOP-16EDV1I\zs_lq zhous0310@gmail.com
- * @LastEditTime: 2023-04-11 20:20:25
+ * @LastEditors: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
+ * @LastEditTime: 2023-04-12 17:22:31
  * @FilePath: \study\codeNinjaBlog\pages\post\music-player.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
-import { fetchSongUrlById, fm } from '@/api/music';
+import { fetchLRCById, fetchSongUrlById, fm } from '@/api/music';
 import MusicPlayerLogin from '@/components/MusicPlayer/Login';
+import Lrc from '@/components/MusicPlayer/Lrc';
 import styles from '@/styles/music-player.module.scss';
 import { useEffect, useRef, useState } from 'react';
 export default function MusicPlayerView() {
@@ -26,21 +27,32 @@ export default function MusicPlayerView() {
       w = canvasRef.current.width;
       h = canvasRef.current.height;
       ctx = canvasRef.current.getContext('2d') as CanvasRenderingContext2D;
-      ctx.fillStyle = '#fff';
+      ctx.fillStyle = '#fa8072';
     }
     if (audioRef.current) {
       audioRef.current.addEventListener('ended', () => {
         const index = musicList.findIndex((item) => item.id == songId);
-        if (index < musicList.length - 3) {
+        if (index < musicList.length - 1) {
           setSongId(musicList[index + 1].id);
         } else {
           fetchMusicList();
         }
       });
+      audioRef.current.addEventListener('timeupdate', () => {
+        setCurrentTime(audioRef.current?.currentTime || 0);
+      });
     }
     audioRef.current?.addEventListener('play', init);
     draw();
     fetchMusicList();
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener('ended', () => {});
+        audioRef.current.removeEventListener('timeupdate', () => {
+          setCurrentTime(audioRef.current?.currentTime || 0);
+        });
+      }
+    };
   }, []);
   let audioCtx, source, analyser: AnalyserNode, dataArr: Uint8Array;
   let isInit = false;
@@ -88,6 +100,9 @@ export default function MusicPlayerView() {
   const [musicList, setMusicList] = useState<{ name: string; id: string }[]>([]);
   const [songId, setSongId] = useState('');
   const [songUrl, setSongUrl] = useState('');
+  const [songName, setSongName] = useState('');
+  const [lrc, setLrc] = useState('');
+  const [currentTime, setCurrentTime] = useState<number>(0);
   const fetchMusicList = () => {
     fm().then(({ data }: any) => {
       const list = data.map((item: any) => {
@@ -106,13 +121,30 @@ export default function MusicPlayerView() {
           setSongUrl(res.data[0].url);
         }
       });
+      fetchLRCById(songId).then((res: any) => {
+        const { lrc } = res;
+        console.log(lrc.lyric);
+        setLrc(lrc?.lyric);
+      });
+      const music = musicList.find((music) => music.id == songId);
+      setSongName(music?.name || '');
     }
   }, [songId]);
   return (
     <div className={`${styles.playerView}`}>
-      <canvas ref={canvasRef} className="w-full"></canvas>
-      <audio className="mt-10 mx-auto" crossOrigin="anonymous" ref={audioRef} controls src={songUrl}></audio>
+      <canvas ref={canvasRef} className="w-full absolute bottom-0"></canvas>
+
       <MusicPlayerLogin />
+      <div className="text-center py-4 text-2xl text-white">{songName}</div>
+      <Lrc lrc={lrc} currentTime={currentTime} />
+      <audio
+        className="mt-10 mx-auto absolute bottom-0"
+        crossOrigin="anonymous"
+        ref={audioRef}
+        controls
+        autoPlay
+        src={songUrl}
+      ></audio>
     </div>
   );
 }

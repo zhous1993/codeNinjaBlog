@@ -1,0 +1,10 @@
+.header{
+    a{color: #999;}
+}
+.menu{
+    transition: all 0.5s;
+    &:hover{
+        color: white;
+        transform: scale(1.2);
+    }
+}

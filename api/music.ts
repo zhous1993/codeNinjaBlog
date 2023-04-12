@@ -2,7 +2,7 @@
  * @Author: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
  * @Date: 2023-04-11 14:16:54
  * @LastEditors: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
- * @LastEditTime: 2023-04-11 17:36:05
+ * @LastEditTime: 2023-04-12 10:38:13
  * @FilePath: \study\codeNinjaBlog\api\music.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -68,3 +68,14 @@ export const fetchSongUrlById = (id: string, level: SongLevel = SongLevel.higher
     params: { id, level },
   });
 };
+
+/**
+ * 获取歌词
+ * @param id 歌曲id
+ * @returns
+ */
+export const fetchLRCById = (id: string) =>
+  request({
+    url: '/lyric',
+    params: { id },
+  });
