@@ -6,6 +6,7 @@ export type PoetryType = {
   paragraphs: string[];
   title: string;
   strains: string[];
+  pinyin: Array<[string, string]>;
 };
 export const formatTime = (date: Date) => {
   let _date = new Date(date);
@@ -16,11 +17,39 @@ export const formatTime = (date: Date) => {
   return { yyyy, m, d, w };
 };
 export const WEEKS = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+const formatPinyin = (str: string, pinyin: Array<[string, string]>) => {
+  const arr = str.split('');
+  const _pinyin = new Map(pinyin);
+  return (
+    <>
+      {arr.map((key, index) => (
+        <div key={index} className="w-[50px] py-2 inline-block text-center">
+          <ruby>
+            {key}
+            <rp>(</rp>
+            <rt>{_pinyin.get(key)}</rt>
+            <rp>)</rp>
+          </ruby>
+        </div>
+      ))}
+    </>
+  );
+};
 export default function DailyPoetry({ poetry }: { poetry: PoetryType }) {
   useEffect(() => {
     const { yyyy, m, d, w } = formatTime(new Date());
     setDate({ yyyy, m, d, w: WEEKS[w] });
   }, []);
+  useEffect(() => {
+    let list: string[] = [];
+    poetry.paragraphs.forEach((item) => {
+      item = item.replace('。', '');
+      list = [...list, ...item.split('，')];
+    });
+    setPoetryList(list);
+  }, [poetry]);
+
+  const [poetryList, setPoetryList] = useState<Array<string>>([]);
   const [date, setDate] = useState<any>({});
 
   return (
@@ -35,8 +64,8 @@ export default function DailyPoetry({ poetry }: { poetry: PoetryType }) {
         <div className="text-2xl font-semibold mb-2">{poetry.title}</div>
         <div className="text-[#333] mb-2">{poetry.author}</div>
         <div>
-          {poetry.paragraphs.map((item) => (
-            <div>{item}</div>
+          {poetryList.map((item, index) => (
+            <div key={index}>{formatPinyin(item, poetry.pinyin)}</div>
           ))}
         </div>
       </article>
