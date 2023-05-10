@@ -1,8 +1,9 @@
+'use client';
 /*
  * @Author: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
  * @Date: 2023-04-10 17:05:24
- * @LastEditors: DESKTOP-16EDV1I\zs_lq zhous0310@gmail.com
- * @LastEditTime: 2023-04-12 22:12:25
+ * @LastEditors: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
+ * @LastEditTime: 2023-04-14 17:42:07
  * @FilePath: \study\codeNinjaBlog\pages\post\music-player.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -11,6 +12,7 @@ import MusicPlayerLogin from '@/components/MusicPlayer/Login';
 import Lrc from '@/components/MusicPlayer/Lrc';
 import styles from '@/styles/music-player.module.scss';
 import { useEffect, useRef, useState } from 'react';
+import Draw from '@/components/MusicPlayer/Draw';
 export default function MusicPlayerView() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const audioRef = useRef<HTMLMediaElement>(null);
@@ -40,11 +42,12 @@ export default function MusicPlayerView() {
         }
       });
       audioRef.current.addEventListener('timeupdate', () => {
+        console.log(audioRef.current?.currentTime);
         setCurrentTime(audioRef.current?.currentTime || 0);
       });
+      // audioRef.current?.addEventListener('play', init);
     }
-    audioRef.current?.addEventListener('play', init);
-    draw();
+    // draw();
     fetchMusicList();
     return () => {
       if (audioRef.current) {
@@ -115,6 +118,9 @@ export default function MusicPlayerView() {
       setMusicList(list);
     });
   };
+  const createSource = (audioCtx: AudioContext) => {
+    return audioCtx.createMediaElementSource(audioRef.current as HTMLMediaElement);
+  };
   useEffect(() => {
     setSongId(musicList[0]?.id);
   }, [musicList]);
@@ -143,8 +149,8 @@ export default function MusicPlayerView() {
         />
       ) : (
         <>
-          <canvas ref={canvasRef} className="w-full absolute bottom-0"></canvas>
-
+          {/* <canvas ref={canvasRef} className="w-full absolute bottom-0"></canvas> */}
+          <Draw createSource={createSource} />
           <div className="text-center py-4 text-2xl text-white">{songName}</div>
           <Lrc lrc={lrc} currentTime={currentTime} />
           <audio

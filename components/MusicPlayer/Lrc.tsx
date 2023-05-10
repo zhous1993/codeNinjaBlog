@@ -1,8 +1,8 @@
 /*
  * @Author: DESKTOP-16EDV1I\zs_lq zhous0310@gmail.com
  * @Date: 2023-04-12 20:59:50
- * @LastEditors: DESKTOP-16EDV1I\zs_lq zhous0310@gmail.com
- * @LastEditTime: 2023-04-12 21:26:53
+ * @LastEditors: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
+ * @LastEditTime: 2023-04-14 10:15:39
  * @FilePath: \Study\ninja-blog\components\MusicPlayer\Lrc.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -40,7 +40,7 @@ export default function Lrc({ lrc, currentTime }: { lrc: string; currentTime: nu
   useEffect(() => {
     const index = lrcList.findIndex((item) => item.time > currentTime * 1000);
     setActiveIndex(index < 0 ? 0 : index - 1);
-  }, [currentTime, lrcList]);
+  }, [currentTime]);
   return (
     <div ref={lrcBoxRef} className={`${styles.lrcBox} text-white`}>
       <div className={styles.list} style={{ transform: `translateY(${h / 2 - activeIndex * 40}px)` }}>

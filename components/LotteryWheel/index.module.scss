@@ -1,0 +1,47 @@
+.wheelWraper{
+    width: 200px;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    transition: all ease-in-out 5s;
+}
+.wheelItem{
+    width: 50%;
+    position: absolute;
+    
+    height: 100px;
+    transform-origin: 100% 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+.arrowdown{
+    width: 200px;
+    text-align: center;
+    &::after{
+        content: '';
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border: 20px solid transparent;
+        border-top-color: red;
+    }
+}
+.myRotate{
+    animation: zhuanzhuan infinite forwards 100ms;
+}
+@for $i from 1 through 9 {
+    .wheelItem:nth-child(#{$i}){
+        transform: rotate(40deg*$i) skew(50deg);
+    }
+}
+
+@keyframes zhuanzhuan {
+    from{
+        transform: rotate(0);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}

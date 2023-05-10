@@ -2,7 +2,7 @@
  * @Author: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
  * @Date: 2023-04-11 14:16:54
  * @LastEditors: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
- * @LastEditTime: 2023-04-12 10:38:13
+ * @LastEditTime: 2023-05-08 16:10:12
  * @FilePath: \study\codeNinjaBlog\api\music.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -20,7 +20,7 @@ export enum SongLevel {
 export const fetchQRKey = () => {
   return request({
     method: 'get',
-    url: '/login/qr/key',
+    url: '/music/login/qr/key',
   });
 };
 /**
@@ -31,7 +31,7 @@ export const fetchQRKey = () => {
 export const createQR = (key: string) =>
   request({
     method: 'get',
-    url: '/login/qr/create',
+    url: '/music/login/qr/create',
     params: { key, qrimg: true },
   });
 
@@ -42,7 +42,7 @@ export const createQR = (key: string) =>
  */
 export const checkQR = (key: string) =>
   request({
-    url: '/login/qr/check',
+    url: '/music/login/qr/check',
     params: { key },
   });
 
@@ -51,7 +51,7 @@ export const checkQR = (key: string) =>
  */
 export const fm = () => {
   return request({
-    url: '/personal_fm',
+    url: '/music/personal_fm',
     method: 'get',
   });
 };
@@ -64,7 +64,7 @@ export const fm = () => {
  */
 export const fetchSongUrlById = (id: string, level: SongLevel = SongLevel.higher) => {
   return request({
-    url: '/song/url/v1',
+    url: '/music/song/url/v1',
     params: { id, level },
   });
 };
@@ -76,6 +76,6 @@ export const fetchSongUrlById = (id: string, level: SongLevel = SongLevel.higher
  */
 export const fetchLRCById = (id: string) =>
   request({
-    url: '/lyric',
+    url: '/music/lyric',
     params: { id },
   });

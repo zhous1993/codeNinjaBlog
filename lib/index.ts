@@ -38,7 +38,6 @@ const getDailyPoetry = async () => {
   const index = Math.round(Math.random() * 1000);
   const res = { ...poetry[index] };
   res.pinyin = translatePinyin(poetry[index]);
-  console.log(res);
   return JSON.stringify(res);
 };
 const params = {
@@ -46,7 +45,7 @@ const params = {
 };
 const page = Math.round(Math.random() * 50);
 const fetchBannerImg = async () => {
-  const res = await fetch(`${API_BASE}?orientation=horizontal&page=${page}`);
+  const res = await fetch(`/cover/?orientation=horizontal&page=${page}`);
   return JSON.stringify(res);
 };
 export { getDailyPoetry, fetchBannerImg };

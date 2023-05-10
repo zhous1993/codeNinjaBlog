@@ -1,5 +1,6 @@
 .bgImage{
     background: url('https://andersnoren.se/themes/garfunkel/wp-content/themes/garfunkel/assets/images/bg.jpg') no-repeat;
+    background-repeat: no-repeat;
     background-size: cover;
     background-position: center top;
     height: 960px;
