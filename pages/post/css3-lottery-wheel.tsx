@@ -2,7 +2,7 @@ import LotteryWheel from '@/components/LotteryWheel';
 import Layout from '@/components/layout';
 import React, { Component } from 'react';
 
-export default class CSS3LotteryWheel extends Component {
+export default class CSS3LotteryWheel extends Component<{}, { awardList: Array<any> }> {
   constructor(props: {}) {
     super(props);
     this.state = {
