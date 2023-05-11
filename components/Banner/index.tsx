@@ -7,10 +7,10 @@ export default function Banner() {
   const [bannerBg, setBannerBg] = useState('');
 
   useEffect(() => {
-    // fetchBannerImg().then(({ data }) => {
-    //   const { hits } = data;
-    //   setBannerBg(hits[0].largeImageURL);
-    // });
+    fetchBannerImg().then(({ data }) => {
+      const { hits } = data;
+      setBannerBg(hits[0].largeImageURL);
+    });
   }, []);
 
   return (
