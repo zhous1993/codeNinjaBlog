@@ -3,7 +3,7 @@ import { resolve } from 'path';
  * @Author: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
  * @Date: 2023-05-10 14:59:49
  * @LastEditors: DESKTOP-ER2OAAD\zs_lq zhous@ai-cloud.edu
- * @LastEditTime: 2023-05-11 09:40:14
+ * @LastEditTime: 2023-05-11 09:46:08
  * @FilePath: \study\codeNinjaBlog\util\myPromise.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE   
  */
@@ -36,7 +36,7 @@ export enum PROMISE_STATUS {
     FULLFIELD = 'fullfield',
     REJECT = 'reject'
 }
-export type HandlerType = { onFullfield: Fn, onRejected: Fn, resolve: Fn, reject: Fn }
+export type HandlerType = { onFullfield: Fn, onRejected: Fn | null, resolve: Fn, reject: Fn }
 export class MyPromise {
     #state: PROMISE_STATUS = PROMISE_STATUS.PENDING;
     #result: any = undefined;
@@ -68,15 +68,15 @@ export class MyPromise {
         this.#run()
     }
 
-    then(onFullfield: Fn, onRejected: Fn) {
+    then(onFullfield: Fn, onRejected?: Fn) {
 
         return new MyPromise((resolve, reject) => {
-            this.#handlers ? this.#handlers.push({ onFullfield, onRejected, resolve, reject }) : this.#handlers = [{ onFullfield, onRejected, resolve, reject }]
+            this.#handlers ? this.#handlers.push({ onFullfield, onRejected: onRejected || null, resolve, reject }) : this.#handlers = [{ onFullfield, onRejected: onRejected || null, resolve, reject }]
             this.#run()
         })
     }
 
-    #runOne(callback: Fn, resolve: Fn, reject: Fn) {
+    #runOne(callback: Fn | null, resolve: Fn, reject: Fn) {
         this.#runMicroTask(() => {
             if (typeof callback !== 'function') {
                 const settled = this.#state == PROMISE_STATUS.FULLFIELD ? resolve : reject
