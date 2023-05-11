@@ -23,7 +23,7 @@ export default class CSS3LotteryWheel extends Component<{}, { awardList: Array<a
     const { awardList } = this.state;
     return (
       <Layout>
-        <div>
+        <div className="flex justify-center">
           <LotteryWheel awardList={awardList} />
         </div>
       </Layout>
