@@ -20,6 +20,7 @@ const blogList: Array<BlogItemType> = [
   { title: 'day05 转盘大抽奖', id: '05', date: '2023-5-6', link: '/post/css3-lottery-wheel' },
   { title: 'day06 手写Promise', id: '06', date: '2023-5-10', link: '/post/handwrite-promise' },
   { title: 'day07 2048', id: '07', date: '2023-5-11', link: '/post/game2048' },
+  { title: 'day08 瀑布流', id: '08', date: '2023-5-16', link: '/post/waterfall' },
 ];
 export async function getServerSideProps() {
   let dailyPoetry = await getDailyPoetry();

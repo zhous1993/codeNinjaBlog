@@ -121,6 +121,9 @@ export default function MusicPlayerView() {
   const createSource = (audioCtx: AudioContext) => {
     return audioCtx.createMediaElementSource(audioRef.current as HTMLMediaElement);
   };
+  const getData = () => {
+    
+  }
   useEffect(() => {
     setSongId(musicList[0]?.id);
   }, [musicList]);
@@ -150,7 +153,7 @@ export default function MusicPlayerView() {
       ) : (
         <>
           {/* <canvas ref={canvasRef} className="w-full absolute bottom-0"></canvas> */}
-          <Draw createSource={createSource} />
+          <Draw getData={} />
           <div className="text-center py-4 text-2xl text-white">{songName}</div>
           <Lrc lrc={lrc} currentTime={currentTime} />
           <audio

@@ -17,3 +17,10 @@ export const fetchBannerImg = () => {
     });
 
 };
+
+export const queryImage = (page: number) => {
+    return request({
+        url: `/api/cover/?orientation=horizontal&page=${page}&key=${key}`,
+        method: 'get'
+    })
+}
