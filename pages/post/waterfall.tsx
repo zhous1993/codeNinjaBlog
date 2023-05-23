@@ -53,8 +53,8 @@ export default class waterfall extends Component<
         const yAxios = this.state.yAxios;
         yAxios[i] += imgEl.height + 10;
         this.setState({ yAxios });
-
-        this.state.container ? (this.state.container.style.height = Math.max(...this.state.yAxios) + 'px') : '';
+        const el = document.querySelector('.waterfall-container') as HTMLElement;
+        el ? (el.style.height = Math.max(...this.state.yAxios) + 'px') : '';
       };
       this.state.container?.appendChild(imgEl);
     });
